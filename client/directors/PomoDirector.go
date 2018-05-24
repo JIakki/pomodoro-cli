@@ -5,14 +5,15 @@ import (
 )
 
 type PomoDirector struct {
-	builder builders.PomoBuilder
+	builder builders.PomoUiBuilder
 }
 
 func (pd *PomoDirector) Construct() {
-	pd.builder.NewPomo()
+	pd.builder.NewPomoUi()
 	pd.builder.BuildProgressBar()
+	pd.builder.BuildTimer()
 }
 
-func NewPomoDirector(builder builders.PomoBuilder) *PomoDirector {
+func NewPomoDirector(builder builders.PomoUiBuilder) *PomoDirector {
 	return &PomoDirector{builder}
 }

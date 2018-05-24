@@ -6,7 +6,7 @@ import (
 )
 
 func NewClient() {
-	classicPomoBuilder := builders.NewClassicPomoBuilder()
+	classicPomoBuilder := builders.NewPomoTuiBuilder()
 	director := directors.NewPomoDirector(classicPomoBuilder)
 	director.Construct()
 

@@ -4,8 +4,9 @@ import (
 	"github.com/JIakki/pomodoro-cli/client/components"
 )
 
-type PomoBuilder interface {
-	NewPomo()
+type PomoUiBuilder interface {
+	NewPomoUi()
 	BuildProgressBar()
-	GetResult() *components.Pomo
+	BuildTimer()
+	GetResult() *components.PomoUi
 }
