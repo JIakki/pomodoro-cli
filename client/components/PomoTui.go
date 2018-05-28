@@ -1,22 +1,29 @@
 package components
 
 import (
+	"github.com/JIakki/pomodoro-cli/client/components/TimeHumanize"
 	"github.com/marcusolsson/tui-go"
 )
 
 type PomoUi struct {
-	progressBar *tui.StatusBar
-	timer       *tui.Label
+	progressBar          *tui.StatusBar
+	timer                *tui.Label
+	timeHumanizeProvider humanize.TimeHumanize
+}
+
+func (p *PomoUi) SetTimeHumanizeProvider(provider humanize.TimeHumanize) {
+	p.timeHumanizeProvider = provider
 }
 
 func (p *PomoUi) SetProgressBar(status string) {
-
 	p.progressBar = tui.NewStatusBar(status)
 }
 
-func (p *PomoUi) SetTimer(time string) {
-	p.timer = tui.NewLabel(time)
+func (p *PomoUi) SetTimer(time int) {
+	humanizedTime := p.timeHumanizeProvider.Convert(time)
+	p.timer = tui.NewLabel(humanizedTime)
 	p.timer.SetStyleName("fatal")
+	p.timer.SizeHint()
 }
 
 func (p *PomoUi) Start() {
