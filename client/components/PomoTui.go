@@ -6,6 +6,7 @@ import (
 )
 
 type PomoUi struct {
+	ui                   tui.UI
 	progressBar          *tui.StatusBar
 	timer                *tui.Label
 	timeHumanizeProvider humanize.TimeHumanize
@@ -23,7 +24,11 @@ func (p *PomoUi) SetTimer(time int) {
 	humanizedTime := p.timeHumanizeProvider.Convert(time)
 	p.timer = tui.NewLabel(humanizedTime)
 	p.timer.SetStyleName("fatal")
-	p.timer.SizeHint()
+}
+
+func (p *PomoUi) UpdateTimer(time int) {
+	humanizedTime := p.timeHumanizeProvider.Convert(time)
+	p.timer.SetText(humanizedTime)
 }
 
 func (p *PomoUi) Start() {
@@ -43,6 +48,8 @@ func (p *PomoUi) Start() {
 	)
 
 	ui, err := tui.New(vbox)
+	p.ui = ui
+
 	if err != nil {
 		panic(err)
 	}
@@ -52,4 +59,8 @@ func (p *PomoUi) Start() {
 	if err := ui.Run(); err != nil {
 		panic(err)
 	}
+}
+
+func (p *PomoUi) UpdateUi() {
+	p.ui.Update(func() {})
 }

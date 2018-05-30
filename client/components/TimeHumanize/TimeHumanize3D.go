@@ -1,7 +1,6 @@
 package humanize
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -72,7 +71,6 @@ var numbersMap = []string{
  \ \_____  \   
   \|____|\  \  
     ____\_\  \ 
-   |\_________\
    \|_________|
 	`,
 	`
@@ -134,16 +132,13 @@ func (th *TimeHumanize3D) Convert(time int) string {
 	minutes := time / 60
 	seconds := time % 60
 
-	var symbolsArray = [][]string{
-		linesOfNumbers[0],
-		linesOfNumbers[minutes],
-		linesOfColon,
-		linesOfNumbers[0],
-		linesOfNumbers[seconds],
-	}
+	var symbolsArray [][]string
+
+	symbolsArray = addNumberToArray(symbolsArray, minutes)
+	symbolsArray = append(symbolsArray, linesOfColon)
+	symbolsArray = addNumberToArray(symbolsArray, seconds)
 
 	for i := 0; i < maxLetterHeight; i++ {
-
 		for _, lines := range symbolsArray {
 			if i < len(lines) {
 
@@ -154,11 +149,17 @@ func (th *TimeHumanize3D) Convert(time int) string {
 		result += "\n"
 	}
 
-	fmt.Println(linesOfNumbers[minutes], linesOfColon)
-
 	return result
 }
 
-func convertNumber(arr []string) {
+func addNumberToArray(arr [][]string, number int) [][]string {
+	if number < 10 {
+		arr = append(arr, linesOfNumbers[0])
+		arr = append(arr, linesOfNumbers[number])
+	} else {
+		arr = append(arr, linesOfNumbers[number/10])
+		arr = append(arr, linesOfNumbers[number%10])
+	}
 
+	return arr
 }

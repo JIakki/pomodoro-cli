@@ -18,7 +18,7 @@ func (pb *PomoTuiBuilder) BuildProgressBar() {
 }
 
 func (pb *PomoTuiBuilder) BuildTimer() {
-	pb.pomoUi.SetTimer(129)
+	pb.pomoUi.SetTimer(0)
 }
 
 func (pb *PomoTuiBuilder) SetTimeHumanizeProvider(provider humanize.TimeHumanize) {
