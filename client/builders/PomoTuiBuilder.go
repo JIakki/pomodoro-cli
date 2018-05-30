@@ -2,6 +2,7 @@ package builders
 
 import (
 	"github.com/JIakki/pomodoro-cli/client/components"
+	"github.com/JIakki/pomodoro-cli/client/components/TimeHumanize"
 )
 
 type PomoTuiBuilder struct {
@@ -17,7 +18,11 @@ func (pb *PomoTuiBuilder) BuildProgressBar() {
 }
 
 func (pb *PomoTuiBuilder) BuildTimer() {
-	pb.pomoUi.SetTimer("30:00")
+	pb.pomoUi.SetTimer(0)
+}
+
+func (pb *PomoTuiBuilder) SetTimeHumanizeProvider(provider humanize.TimeHumanize) {
+	pb.pomoUi.SetTimeHumanizeProvider(provider)
 }
 
 func (pb *PomoTuiBuilder) GetResult() *components.PomoUi {
