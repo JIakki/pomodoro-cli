@@ -8,7 +8,7 @@ import (
 
 func NewClient() {
 	c := make(chan int)
-	pomo := models.NewPomo()
+	pomo := models.NewPomo(4, 30, 5)
 	classicPomoBuilder := builders.NewPomoTuiBuilder()
 	director := directors.NewPomoDirector(classicPomoBuilder)
 	director.Construct()
@@ -17,6 +17,7 @@ func NewClient() {
 	go pomo.Start(c)
 	go func(c chan int) {
 		for {
+			pomoUi.UpdatePomoType(pomo.GetType())
 			pomoUi.UpdateTimer(<-c)
 			pomoUi.UpdateUi()
 		}

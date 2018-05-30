@@ -10,6 +10,7 @@ type PomoUi struct {
 	progressBar          *tui.StatusBar
 	timer                *tui.Label
 	timeHumanizeProvider humanize.TimeHumanize
+	pomoType             string
 }
 
 func (p *PomoUi) SetTimeHumanizeProvider(provider humanize.TimeHumanize) {
@@ -28,12 +29,19 @@ func (p *PomoUi) SetTimer(time int) {
 
 func (p *PomoUi) UpdateTimer(time int) {
 	humanizedTime := p.timeHumanizeProvider.Convert(time)
+	if p.pomoType == "work" {
+		p.timer.SetStyleName("fatal")
+	} else {
+		p.timer.SetStyleName("success")
+	}
+
 	p.timer.SetText(humanizedTime)
 }
 
 func (p *PomoUi) Start() {
 	theme := tui.NewTheme()
 	theme.SetStyle("label.fatal", tui.Style{Bg: tui.ColorDefault, Fg: tui.ColorRed})
+	theme.SetStyle("label.success", tui.Style{Bg: tui.ColorDefault, Fg: tui.ColorGreen})
 
 	hBox := tui.NewHBox(
 		tui.NewSpacer(),
@@ -59,6 +67,10 @@ func (p *PomoUi) Start() {
 	if err := ui.Run(); err != nil {
 		panic(err)
 	}
+}
+
+func (p *PomoUi) UpdatePomoType(pomoType string) {
+	p.pomoType = pomoType
 }
 
 func (p *PomoUi) UpdateUi() {
