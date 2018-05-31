@@ -4,10 +4,10 @@ import (
 	"time"
 )
 
-const WorkType = "work"
-const RestType = "rest"
-const PlayStatus = "play"
-const PauseStatus = "pause"
+const WorkStatus = "work"
+const RestStatus = "rest"
+
+var instance *Pomo
 
 type Pomo struct {
 	ticker         *time.Ticker
@@ -16,11 +16,13 @@ type Pomo struct {
 	workDuration   int
 	restDuration   int
 	durationRemain int
-	pomoType       string // work, rest
-	status         string
+	status         string // work, rest
+	started        bool
 }
 
 func (p *Pomo) Start(c chan int) {
+	p.started = true
+
 	p.ticker = time.NewTicker(1000 * time.Millisecond)
 	for range p.ticker.C {
 		p.durationRemain -= 1
@@ -35,32 +37,50 @@ func (p *Pomo) Start(c chan int) {
 }
 
 func (p *Pomo) Done() {
-	if p.pomoType == WorkType {
+	if p.status == WorkStatus {
 		p.durationRemain = p.restDuration
-		p.pomoType = RestType
+		p.status = RestStatus
 	} else {
 		p.durationRemain = p.workDuration
-		p.pomoType = WorkType
-
+		p.status = WorkStatus
 	}
+
+	p.Stop()
 
 }
 
 func (p *Pomo) Stop() {
 	p.ticker.Stop()
+	p.started = false
 }
 
-func (p *Pomo) GetType() string {
-	return p.pomoType
+func (p *Pomo) GetStatus() string {
+	return p.status
 }
 
-func NewPomo(pomodoros int, work int, rest int) *Pomo {
-	return &Pomo{
-		pomodoros:      pomodoros,
-		workDuration:   work * 60,
-		restDuration:   rest * 60,
-		durationRemain: work * 60,
-		pomoType:       WorkType,
-		status:         PlayStatus,
+func (p *Pomo) GetWorkDuration() int {
+	return p.workDuration
+}
+
+func (p *Pomo) IsStarted() bool {
+	return p.started
+}
+
+// Singleton
+func NewPomo() *Pomo {
+	println(instance == nil)
+	if instance != nil {
+		return instance
 	}
+
+	instance := &Pomo{
+		pomodoros:      4,
+		workDuration:   30 * 60,
+		restDuration:   5 * 60,
+		durationRemain: 30 * 60,
+		status:         WorkStatus,
+		started:        false,
+	}
+
+	return instance
 }

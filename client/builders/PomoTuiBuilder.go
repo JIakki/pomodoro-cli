@@ -3,6 +3,7 @@ package builders
 import (
 	"github.com/JIakki/pomodoro-cli/client/components"
 	"github.com/JIakki/pomodoro-cli/client/components/TimeHumanize"
+	"github.com/JIakki/pomodoro-cli/controllers"
 	"github.com/JIakki/pomodoro-cli/models"
 )
 
@@ -22,8 +23,8 @@ func (pb *PomoTuiBuilder) BuildStatus() {
 	pb.pomoUi.SetStatus()
 }
 
-func (pb *PomoTuiBuilder) BuildTimer() {
-	pb.pomoUi.SetTimer(0)
+func (pb *PomoTuiBuilder) BuildTimer(time int) {
+	pb.pomoUi.SetTimer(time)
 }
 
 func (pb *PomoTuiBuilder) SetTimeHumanizeProvider(provider humanize.TimeHumanize) {
@@ -34,6 +35,9 @@ func (pb *PomoTuiBuilder) SetPomoProvider(provider *models.Pomo) {
 	pb.pomoUi.SetPomoProvider(provider)
 }
 
+func (pb *PomoTuiBuilder) SetControllersProvider(provider *controllers.Controllers) {
+	pb.pomoUi.SetControllersProvider(provider)
+}
 func (pb *PomoTuiBuilder) GetResult() *components.PomoUi {
 	return pb.pomoUi
 }
